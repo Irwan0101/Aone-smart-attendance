@@ -1,0 +1,39 @@
+name: Aone APK Generator
+on:
+  workflow_dispatch: # Supaya Anda bisa jalankan manual klik tombol
+  release:
+    types: [published]
+
+jobs:
+  build_apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Get Bundletool
+        run: wget https://github.com/google/bundletool/releases/download/1.18.3/bundletool-all-1.18.3.jar -O bundletool.jar
+
+      - name: Download AAB from Release
+        # Jika Anda upload manual AAB ke Release, script ini akan mengambilnya
+        # Atau jika AAB ada di root project, ganti perintah ini
+        run: |
+          echo "Mencari file AAB..."
+          # Script ini berasumsi Anda upload file .aab ke halaman Release
+
+      - name: Convert AAB to APK
+        run: |
+          # Ganti 'app.aab' dengan nama file yang Anda upload
+          java -jar bundletool.jar build-apks --bundle=app.aab --output=app.apks --mode=universal
+          unzip app.apks -d hasil_apk
+          mv hasil_apk/universal.apk Aone-Attendance-Siswa.apk
+
+      - name: Upload APK to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: Aone-Attendance-Siswa.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
