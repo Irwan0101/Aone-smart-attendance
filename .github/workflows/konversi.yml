@@ -27,9 +27,9 @@ jobs:
       - name: Convert AAB to APK
         run: |
           # Ganti 'app.aab' dengan nama file yang Anda upload
-          java -jar bundletool.jar build-apks --bundle=app.aab --output=app.apks --mode=universal
+          java -jar bundletool.jar build-apks --bundle=aone-smart-present.aab --output=app.apks --mode=universal
           unzip app.apks -d hasil_apk
-          mv hasil_apk/universal.apk Aone-Attendance-Siswa.apk
+          mv hasil_apk/universal.apk aone-smart-present.apk
 
       - name: Upload APK to Release
         uses: softprops/action-gh-release@v2
